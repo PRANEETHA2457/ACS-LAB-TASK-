@@ -1,0 +1,43 @@
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+
+        HashMap<Integer, Integer> map = new HashMap<>();
+
+        for (int i = 0; i < n; i++) {
+            int product = sc.nextInt();
+
+            if (map.containsKey(product)) {
+                map.put(product, map.get(product) + 1);
+            } else {
+                map.put(product, 1);
+            }
+        }
+
+        int maxFreq = 0;
+        int result = Integer.MAX_VALUE;
+
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            int product = entry.getKey();
+            int frequency = entry.getValue();
+
+            if (frequency > maxFreq) {
+                maxFreq = frequency;
+                result = product;
+            } 
+            else if (frequency == maxFreq && product < result) {
+                result = product;
+            }
+        }
+
+        System.out.println(result + " " + maxFreq);
+
+        sc.close();
+    }
+}
