@@ -1,0 +1,62 @@
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        int k = sc.nextInt();
+
+        int[] freq = new int[26];
+
+        // Count task frequencies
+        for (int i = 0; i < n; i++) {
+            char task = sc.next().charAt(0);
+            freq[task - 'A']++;
+        }
+
+        // Max Priority Queue
+        PriorityQueue<Integer> pq =
+                new PriorityQueue<>(Collections.reverseOrder());
+
+        for (int f : freq) {
+            if (f > 0) {
+                pq.offer(f);
+            }
+        }
+
+        int time = 0;
+
+        while (!pq.isEmpty()) {
+            List<Integer> remaining = new ArrayList<>();
+
+            int cycle = k + 1;
+
+            while (cycle > 0 && !pq.isEmpty()) {
+                int current = pq.poll();
+
+                current--;
+                time++;
+                cycle--;
+
+                if (current > 0) {
+                    remaining.add(current);
+                }
+            }
+
+            // Add remaining tasks back
+            for (int f : remaining) {
+                pq.offer(f);
+            }
+
+            // Add idle time if tasks are still remaining
+            if (!pq.isEmpty()) {
+                time += cycle;
+            }
+        }
+
+        System.out.println(time);
+
+        sc.close();
+    }
+}
