@@ -1,0 +1,108 @@
+import java.util.*;
+
+public class Main {
+
+    static class Node {
+        int data;
+        Node left, right;
+
+        Node(int data) {
+            this.data = data;
+        }
+    }
+
+    // Find path from root to the given node
+    static boolean findPath(Node root, int value, List<Node> path) {
+        if (root == null) {
+            return false;
+        }
+
+        path.add(root);
+
+        if (root.data == value) {
+            return true;
+        }
+
+        if (findPath(root.left, value, path) ||
+            findPath(root.right, value, path)) {
+            return true;
+        }
+
+        path.remove(path.size() - 1);
+        return false;
+    }
+
+    // Find Lowest Common Ancestor
+    static Node findLCA(Node root, int n1, int n2) {
+        List<Node> path1 = new ArrayList<>();
+        List<Node> path2 = new ArrayList<>();
+
+        if (!findPath(root, n1, path1) ||
+            !findPath(root, n2, path2)) {
+            return null;
+        }
+
+        int i = 0;
+        Node lca = null;
+
+        while (i < path1.size() &&
+               i < path2.size() &&
+               path1.get(i) == path2.get(i)) {
+
+            lca = path1.get(i);
+            i++;
+        }
+
+        return lca;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+
+        int[] values = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            values[i] = sc.nextInt();
+        }
+
+        // Create root
+        Node root = new Node(values[0]);
+
+        Queue<Node> queue = new LinkedList<>();
+        queue.offer(root);
+
+        int index = 1;
+
+        // Construct binary tree
+        while (!queue.isEmpty() && index < n) {
+            Node current = queue.poll();
+
+            // Left child
+            if (index < n && values[index] != -1) {
+                current.left = new Node(values[index]);
+                queue.offer(current.left);
+            }
+            index++;
+
+            // Right child
+            if (index < n && values[index] != -1) {
+                current.right = new Node(values[index]);
+                queue.offer(current.right);
+            }
+            index++;
+        }
+
+        int node1 = sc.nextInt();
+        int node2 = sc.nextInt();
+
+        Node lca = findLCA(root, node1, node2);
+
+        if (lca != null) {
+            System.out.println("LCA = " + lca.data);
+        }
+
+        sc.close();
+    }
+}
