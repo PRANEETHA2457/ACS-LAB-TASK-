@@ -1,0 +1,60 @@
+import java.util.*;
+
+public class Main {
+    static class Cell {
+        int r, c, t;
+
+        Cell(int r, int c, int t) {
+            this.r = r;
+            this.c = c;
+            this.t = t;
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int R = sc.nextInt();
+        int C = sc.nextInt();
+
+        int[][] g = new int[R][C];
+        Queue<Cell> q = new ArrayDeque<>();
+        int trees = 0;
+
+        for (int i = 0; i < R; i++) {
+            for (int j = 0; j < C; j++) {
+                g[i][j] = sc.nextInt();
+
+                if (g[i][j] == 1)
+                    trees++;
+                else if (g[i][j] == 2)
+                    q.offer(new Cell(i, j, 0));
+            }
+        }
+
+        int minutes = 0;
+        int[] dr = {-1, 1, 0, 0};
+        int[] dc = {0, 0, -1, 1};
+
+        while (!q.isEmpty()) {
+            Cell x = q.poll();
+            minutes = Math.max(minutes, x.t);
+
+            for (int d = 0; d < 4; d++) {
+                int nr = x.r + dr[d];
+                int nc = x.c + dc[d];
+
+                if (nr >= 0 && nr < R && nc >= 0 && nc < C
+                        && g[nr][nc] == 1) {
+                    g[nr][nc] = 2;
+                    trees--;
+                    q.offer(new Cell(nr, nc, x.t + 1));
+                }
+            }
+        }
+
+        System.out.println("Minutes = " + (trees > 0 ? -1 : minutes));
+
+        sc.close();
+    }
+}
