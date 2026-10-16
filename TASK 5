@@ -1,0 +1,52 @@
+mport java.util.Scanner;
+import java.util.Stack;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+
+        int[] temperature = new int[n];
+        int[] result = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            temperature[i] = sc.nextInt();
+        }
+
+        Stack<Integer> stack = new Stack<>();
+
+        // Traverse from right to left
+        for (int i = n - 1; i >= 0; i--) {
+
+            // Remove smaller or equal temperatures
+            while (!stack.isEmpty() &&
+                   temperature[stack.peek()] <= temperature[i]) {
+                stack.pop();
+            }
+
+            // Find next greater temperature
+            if (stack.isEmpty()) {
+                result[i] = -1;
+            } else {
+                result[i] = temperature[stack.peek()];
+            }
+
+            // Push current index
+            stack.push(i);
+        }
+
+        // Print result
+        for (int i = 0; i < n; i++) {
+            System.out.print(result[i]);
+
+            if (i < n - 1) {
+                System.out.print(" ");
+            }
+        }
+
+        System.out.println();
+
+        sc.close();
+    }
+}
