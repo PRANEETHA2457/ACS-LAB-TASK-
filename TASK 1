@@ -1,0 +1,39 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int N = sc.nextInt();
+
+        int[] vehicles = new int[N];
+
+        for (int i = 0; i < N; i++) {
+            vehicles[i] = sc.nextInt();
+        }
+
+        int K = sc.nextInt();
+
+        int currentSum = 0;
+
+        // Sum of first K elements
+        for (int i = 0; i < K; i++) {
+            currentSum += vehicles[i];
+        }
+
+        int maxSum = currentSum;
+
+        // Sliding Window
+        for (int i = K; i < N; i++) {
+            currentSum = currentSum - vehicles[i - K] + vehicles[i];
+
+            if (currentSum > maxSum) {
+                maxSum = currentSum;
+            }
+        }
+
+        System.out.println(maxSum);
+
+        sc.close();
+    }
+}
