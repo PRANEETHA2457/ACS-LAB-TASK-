@@ -1,0 +1,79 @@
+import java.util.*;
+
+public class Main {
+
+    static class Node {
+        int data;
+        Node left, right;
+
+        Node(int data) {
+            this.data = data;
+        }
+    }
+
+    // Calculate height in terms of edges
+    static int height(Node root) {
+        if (root == null) {
+            return -1;
+        }
+
+        int leftHeight = height(root.left);
+        int rightHeight = height(root.right);
+
+        return 1 + Math.max(leftHeight, rightHeight);
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+
+        int[] values = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            values[i] = sc.nextInt();
+        }
+
+        if (n == 0 || values[0] == -1) {
+            System.out.println("Height = -1");
+            System.out.println("Levels = 0");
+            sc.close();
+            return;
+        }
+
+        // Create root
+        Node root = new Node(values[0]);
+
+        Queue<Node> queue = new LinkedList<>();
+        queue.offer(root);
+
+        int index = 1;
+
+        // Construct tree using level order
+        while (!queue.isEmpty() && index < n) {
+            Node current = queue.poll();
+
+            // Left child
+            if (index < n && values[index] != -1) {
+                current.left = new Node(values[index]);
+                queue.offer(current.left);
+            }
+            index++;
+
+            // Right child
+            if (index < n && values[index] != -1) {
+                current.right = new Node(values[index]);
+                queue.offer(current.right);
+            }
+            index++;
+        }
+
+        int treeHeight = height(root);
+        int levels = treeHeight + 1;
+
+        System.out.println("Height = " + treeHeight);
+        System.out.println("Levels = " + levels);
+
+        sc.close();
+    }
+}
