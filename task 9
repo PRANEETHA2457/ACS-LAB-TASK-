@@ -1,0 +1,75 @@
+import java.util.*;
+
+public class Main {
+
+    static class Item {
+        int value, list, pos;
+
+        Item(int v, int l, int p) {
+            value = v;
+            list = l;
+            pos = p;
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int m = sc.nextInt();
+        int k = sc.nextInt();
+
+        int[][] a = new int[m][];
+        PriorityQueue<Item> pq = new PriorityQueue<>(
+            Comparator.comparingInt(x -> x.value)
+        );
+
+        int total = 0;
+
+        for (int i = 0; i < m; i++) {
+            int s = sc.nextInt();
+            total += s;
+            a[i] = new int[s];
+
+            for (int j = 0; j < s; j++) {
+                a[i][j] = sc.nextInt();
+            }
+
+            if (s > 0) {
+                pq.offer(new Item(a[i][0], i, 0));
+            }
+        }
+
+        int[] merged = new int[total];
+        int z = 0;
+
+        while (!pq.isEmpty()) {
+            Item x = pq.poll();
+            merged[z++] = x.value;
+
+            if (x.pos + 1 < a[x.list].length) {
+                pq.offer(new Item(
+                    a[x.list][x.pos + 1],
+                    x.list,
+                    x.pos + 1
+                ));
+            }
+        }
+
+        System.out.println("Merged:");
+        for (int i = 0; i < total; i++) {
+            if (i > 0) System.out.print(" ");
+            System.out.print(merged[i]);
+        }
+        System.out.println();
+
+        System.out.println("TopK:");
+        for (int i = total - 1, c = 0;
+             i >= 0 && c < k; i--, c++) {
+            if (c > 0) System.out.print(" ");
+            System.out.print(merged[i]);
+        }
+        System.out.println();
+
+        sc.close();
+    }
+}
