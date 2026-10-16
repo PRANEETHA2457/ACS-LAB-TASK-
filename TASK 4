@@ -1,0 +1,50 @@
+import java.util.Scanner;
+import java.util.Stack;
+
+public class Main {
+
+    public static boolean isValid(String s) {
+        Stack<Character> stack = new Stack<>();
+
+        for (char ch : s.toCharArray()) {
+
+            // Opening symbols
+            if (ch == '(' || ch == '[' || ch == '{' || ch == '<') {
+                stack.push(ch);
+            }
+
+            // Closing symbols
+            else if (ch == ')' || ch == ']' || ch == '}' || ch == '>') {
+
+                if (stack.isEmpty()) {
+                    return false;
+                }
+
+                char top = stack.pop();
+
+                if ((ch == ')' && top != '(') ||
+                    (ch == ']' && top != '[') ||
+                    (ch == '}' && top != '{') ||
+                    (ch == '>' && top != '<')) {
+                    return false;
+                }
+            }
+        }
+
+        return stack.isEmpty();
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        String s = sc.nextLine();
+
+        if (isValid(s)) {
+            System.out.println("VALID");
+        } else {
+            System.out.println("INVALID");
+        }
+
+        sc.close();
+    }
+}
